@@ -211,84 +211,44 @@ const observer = new IntersectionObserver((entries) => {
 revealTargets.forEach(el => observer.observe(el));
 
 // ============================================================
-// RSVP & PRIVATE WISHES CONTROLLER
+// WHATSAPP WISHES CONTROLLER (9744560630)
 // ============================================================
+const WHATSAPP_NUMBER = '919744560630';
 
-const RSVP_STORAGE_KEY = 'shahin_shibina_rsvps';
-const OWNER_PASSWORD = 'SHAHIN2026'; // Primary password (also accepts SHAHIN, SHIBINA, 2026)
-
-// Pre-populate with a warm sample wish if empty so the owner immediately sees the dashboard layout
-(function initDefaultRsvps() {
-  try {
-    if (!localStorage.getItem(RSVP_STORAGE_KEY)) {
-      const initialDemos = [
-        {
-          id: 'rsvp_sample_1',
-          name: 'Shiyas & Family',
-          attendance: 'Joyfully Accept',
-          guests: '4 Persons',
-          message: 'Heartiest congratulations to dearest Shahin & Beegam Shibina! May Allah bless your union with everlasting love, joy, and barakah. Looking forward to celebrating this beautiful day together!',
-          date: '24 Dec 2026',
-          timestamp: Date.now()
-        }
-      ];
-      localStorage.setItem(RSVP_STORAGE_KEY, JSON.stringify(initialDemos));
-    }
-  } catch (err) {
-    console.warn('Storage initialisation error:', err);
-  }
-})();
-
-function getStoredRsvps() {
-  try {
-    return JSON.parse(localStorage.getItem(RSVP_STORAGE_KEY) || '[]');
-  } catch (e) {
-    return [];
-  }
-}
-
-function saveStoredRsvps(list) {
-  try {
-    localStorage.setItem(RSVP_STORAGE_KEY, JSON.stringify(list));
-  } catch (e) {
-    console.error('Failed to save RSVP:', e);
-  }
-}
-
-// Attendance Radio Button Toggle (Hides guest count dropdown when declining)
-function toggleGuestCount(show) {
-  const guestGroup = document.getElementById('guestCountGroup');
-  if (guestGroup) {
-    guestGroup.style.display = show ? 'flex' : 'none';
-  }
-}
-
-// Form Submission Handler
-function submitRsvpForm(e) {
+function sendWishWhatsApp(e) {
   if (e && e.preventDefault) e.preventDefault();
 
-  const nameInput = document.getElementById('rsvpName');
-  const msgInput  = document.getElementById('rsvpMessage');
-  const guestsEl  = document.getElementById('rsvpGuests');
-  const attendEl  = document.querySelector('input[name="rsvpAttend"]:checked');
-  const submitBtn = document.getElementById('rsvpSubmitBtn');
+  const nameInput = document.getElementById('wishName');
+  const msgInput  = document.getElementById('wishMessage');
+  const submitBtn = document.getElementById('wishSubmitBtn');
 
   const name = nameInput ? nameInput.value.trim() : '';
-  const attendance = attendEl ? attendEl.value : 'Joyfully Accept';
-  const isDecline = attendance === 'Regretfully Decline';
-  const guests = isDecline ? '0 Persons' : (guestsEl ? guestsEl.value : '1 Person');
   const message = msgInput ? msgInput.value.trim() : '';
 
-  // Validation
+  // Validation: Name is required
   if (!name) {
     if (nameInput) {
       nameInput.focus();
       nameInput.style.borderColor = 'var(--gold)';
-      nameInput.style.boxShadow = '0 0 0 3px rgba(200,57,58,0.25)';
+      nameInput.style.boxShadow = '0 0 0 3px rgba(200,57,58,0.35)';
       setTimeout(() => {
         nameInput.style.borderColor = '';
         nameInput.style.boxShadow = '';
-      }, 2200);
+      }, 2000);
+    }
+    return;
+  }
+
+  // Validation: Message is required
+  if (!message) {
+    if (msgInput) {
+      msgInput.focus();
+      msgInput.style.borderColor = 'var(--gold)';
+      msgInput.style.boxShadow = '0 0 0 3px rgba(200,57,58,0.35)';
+      setTimeout(() => {
+        msgInput.style.borderColor = '';
+        msgInput.style.boxShadow = '';
+      }, 2000);
     }
     return;
   }
@@ -296,52 +256,43 @@ function submitRsvpForm(e) {
   // Visual feedback
   if (submitBtn) {
     submitBtn.disabled = true;
-    submitBtn.textContent = 'Recording RSVP…';
+    submitBtn.textContent = 'Connecting to WhatsApp…';
   }
 
-  // Create new entry
-  const now = new Date();
-  const dateFormatted = now.toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
-  }) + ' ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+  // Construct message for WhatsApp
+  const textBody =
+    `*Wedding Wishes for Shahin & Beegam Shibina* ✨\n\n` +
+    `*From:* ${name}\n\n` +
+    `*Message:*\n${message}\n\n` +
+    `_Sent via Wedding Invitation Website_`;
 
-  const newEntry = {
-    id: 'rsvp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
-    name: name,
-    attendance: attendance,
-    guests: guests,
-    message: message,
-    date: dateFormatted,
-    timestamp: Date.now()
-  };
+  const waUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(textBody)}`;
 
-  const list = getStoredRsvps();
-  list.unshift(newEntry); // Add newest at top
-  saveStoredRsvps(list);
+  // Show success box
+  const form = document.getElementById('wishesForm');
+  const successBox = document.getElementById('wishesSuccessBox');
+  if (form) form.hidden = true;
+  if (successBox) successBox.hidden = false;
 
-  // If owner view is currently open, live update it
-  if (sessionStorage.getItem('shahin_shibina_unlocked') === '1') {
-    renderOwnerRsvps();
-  }
+  // Open WhatsApp in new tab
+  window.open(waUrl, '_blank');
 
   setTimeout(() => {
     if (submitBtn) {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Confirm & Send RSVP';
+      submitBtn.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 8px;">
+          <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2ZM12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.59 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.44 19.65L5.27 16.62L5.07 16.31C4.24 14.99 3.81 13.47 3.81 11.91C3.81 7.37 7.5 3.67 12.05 3.67ZM8.95 7.15C8.74 7.15 8.39 7.23 8.1 7.54C7.81 7.86 6.99 8.63 6.99 10.19C6.99 11.76 8.13 13.27 8.29 13.48C8.45 13.69 10.49 16.84 13.67 18.08C16.31 19.12 16.85 18.91 17.41 18.86C17.97 18.81 19.23 18.11 19.49 17.39C19.75 16.66 19.75 16.04 19.67 15.91C19.59 15.78 19.38 15.7 19.07 15.54C18.76 15.39 17.22 14.63 16.93 14.53C16.65 14.43 16.44 14.37 16.23 14.68C16.02 14.99 15.42 15.7 15.24 15.91C15.06 16.12 14.88 16.14 14.57 15.99C14.26 15.83 13.26 15.51 12.08 14.45C11.16 13.63 10.54 12.61 10.36 12.3C10.18 11.99 10.34 11.83 10.5 11.67C10.64 11.53 10.81 11.31 10.97 11.13C11.13 10.95 11.18 10.82 11.28 10.61C11.38 10.4 11.33 10.22 11.25 10.06C11.17 9.9 10.55 8.37 10.29 7.75C10.04 7.15 9.78 7.23 9.58 7.22C9.39 7.21 9.17 7.21 8.95 7.15Z"/>
+        </svg>
+        Send Wish on WhatsApp
+      `;
     }
-    const form = document.getElementById('rsvpForm');
-    const successBox = document.getElementById('rsvpSuccessBox');
-    if (form) form.hidden = true;
-    if (successBox) successBox.hidden = false;
-  }, 400);
+  }, 1000);
 }
 
-// Reset form for another response
-function resetRsvpForm() {
-  const form = document.getElementById('rsvpForm');
-  const successBox = document.getElementById('rsvpSuccessBox');
+function resetWishesForm() {
+  const form = document.getElementById('wishesForm');
+  const successBox = document.getElementById('wishesSuccessBox');
   if (form) {
     form.reset();
     form.hidden = false;
@@ -349,191 +300,4 @@ function resetRsvpForm() {
   if (successBox) {
     successBox.hidden = true;
   }
-  toggleGuestCount(true);
 }
-
-// ============================================================
-// OWNER LOGIN & LOCK MODAL CONTROLS
-// ============================================================
-
-function openWishesUnlockModal() {
-  const modal = document.getElementById('wishesPassModal');
-  const input = document.getElementById('wishesPassInput');
-  const err = document.getElementById('ownerPassError');
-  if (err) err.style.display = 'none';
-  if (input) input.value = '';
-  if (modal) modal.classList.add('open');
-  setTimeout(() => input && input.focus(), 150);
-}
-
-function closeWishesPassModal() {
-  const modal = document.getElementById('wishesPassModal');
-  if (modal) modal.classList.remove('open');
-}
-
-function checkWishesPassword() {
-  const input = document.getElementById('wishesPassInput');
-  const err = document.getElementById('ownerPassError');
-  const val = (input ? input.value : '').trim().toUpperCase();
-
-  // Accept SHAHIN2026, 2026, SHAHIN, SHIBINA
-  const validKeys = ['SHAHIN2026', '2026', 'SHAHIN', 'SHIBINA', 'SHIYAS'];
-
-  if (validKeys.includes(val)) {
-    sessionStorage.setItem('shahin_shibina_unlocked', '1');
-    closeWishesPassModal();
-    unlockWishesView();
-  } else {
-    if (err) {
-      err.textContent = 'Incorrect password. Please try again.';
-      err.style.display = 'block';
-    }
-    if (input) {
-      input.focus();
-      input.select();
-    }
-  }
-}
-
-function unlockWishesView() {
-  const lockCard = document.getElementById('wishesLockCard');
-  const ownerView = document.getElementById('ownerRsvpView');
-  if (lockCard) lockCard.style.display = 'none';
-  if (ownerView) {
-    ownerView.style.display = 'block';
-    renderOwnerRsvps();
-  }
-}
-
-function relockWishes() {
-  sessionStorage.removeItem('shahin_shibina_unlocked');
-  const lockCard = document.getElementById('wishesLockCard');
-  const ownerView = document.getElementById('ownerRsvpView');
-  if (lockCard) lockCard.style.display = 'block';
-  if (ownerView) ownerView.style.display = 'none';
-}
-
-function initWishesLock() {
-  if (sessionStorage.getItem('shahin_shibina_unlocked') === '1') {
-    unlockWishesView();
-  }
-}
-
-// ============================================================
-// RENDER OWNER DASHBOARD (STATS & CARDS)
-// ============================================================
-
-function escapeHtml(str) {
-  if (!str) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-function renderOwnerRsvps() {
-  const rsvps = getStoredRsvps();
-  const container = document.getElementById('rsvpListContainer');
-  const totalEl = document.getElementById('statTotalRsvps');
-  const acceptEl = document.getElementById('statAccepted');
-  const declineEl = document.getElementById('statDeclined');
-  const guestsEl = document.getElementById('statTotalGuests');
-
-  let acceptedCount = 0;
-  let declinedCount = 0;
-  let totalHeadcount = 0;
-
-  rsvps.forEach(r => {
-    if (r.attendance === 'Joyfully Accept') {
-      acceptedCount++;
-      const num = parseInt(r.guests) || 1;
-      totalHeadcount += num;
-    } else {
-      declinedCount++;
-    }
-  });
-
-  if (totalEl) totalEl.textContent = rsvps.length;
-  if (acceptEl) acceptEl.textContent = acceptedCount;
-  if (declineEl) declineEl.textContent = declinedCount;
-  if (guestsEl) guestsEl.textContent = totalHeadcount;
-
-  if (!container) return;
-
-  if (rsvps.length === 0) {
-    container.innerHTML = `
-      <div class="rsvp-empty-msg">
-        No RSVPs or wishes received yet. Submissions through the form above will appear here.
-      </div>
-    `;
-    return;
-  }
-
-  container.innerHTML = rsvps.map(item => {
-    const isAccept = item.attendance === 'Joyfully Accept';
-    const badgeClass = isAccept ? 'accept' : 'decline';
-    const badgeIcon = isAccept ? '✓' : '✕';
-    const safeName = escapeHtml(item.name || 'Anonymous Guest');
-    const safeMsg = escapeHtml(item.message || '');
-    const guestBadge = isAccept ? `<span class="rsvp-badge guests">${escapeHtml(item.guests || '1 Person')}</span>` : '';
-
-    return `
-      <div class="rsvp-item-card" data-id="${item.id}">
-        <div class="rsvp-item-header">
-          <span class="rsvp-item-name">${safeName}</span>
-          <div class="rsvp-item-badges">
-            <span class="rsvp-badge ${badgeClass}">${badgeIcon} ${escapeHtml(item.attendance)}</span>
-            ${guestBadge}
-          </div>
-        </div>
-        ${safeMsg ? `<p class="rsvp-item-msg">&ldquo;${safeMsg}&rdquo;</p>` : ''}
-        <div class="rsvp-item-footer">
-          <span>${escapeHtml(item.date || '')}</span>
-          <button type="button" class="rsvp-del-btn" onclick="deleteRsvp('${item.id}')">Delete</button>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-function deleteRsvp(id) {
-  if (!confirm('Are you sure you want to delete this RSVP?')) return;
-  const list = getStoredRsvps().filter(item => item.id !== id);
-  saveStoredRsvps(list);
-  renderOwnerRsvps();
-}
-
-// ============================================================
-// EXPORT TO CSV
-// ============================================================
-
-function exportRsvpsCsv() {
-  const rsvps = getStoredRsvps();
-  if (rsvps.length === 0) {
-    alert('No RSVPs to export yet.');
-    return;
-  }
-
-  const headers = ['Name', 'Attendance', 'Guests', 'Message', 'Date'];
-  const rows = rsvps.map(r => [
-    `"${(r.name || '').replace(/"/g, '""')}"`,
-    `"${(r.attendance || '').replace(/"/g, '""')}"`,
-    `"${(r.guests || '').replace(/"/g, '""')}"`,
-    `"${(r.message || '').replace(/"/g, '""')}"`,
-    `"${(r.date || '').replace(/"/g, '""')}"`
-  ]);
-
-  const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement('a');
-  link.setAttribute('href', encodedUri);
-  link.setAttribute('download', 'shahin_shibina_wedding_rsvps.csv');
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
-
-// Initialize on page load
-initWishesLock();
