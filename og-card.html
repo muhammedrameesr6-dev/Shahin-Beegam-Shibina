@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1200, height=630">
+<title>Shahin &amp; Beegam Shibina — Wedding Invitation Card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Amiri:ital@0;1&family=Cinzel:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  width: 1200px;
+  height: 630px;
+  background: radial-gradient(ellipse at 50% 50%, #220307 0%, #080002 100%);
+  color: #F5EBE6;
+  font-family: 'Cinzel', serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.outer-border {
+  position: absolute;
+  inset: 24px;
+  border: 1px solid rgba(200, 57, 58, 0.45);
+  pointer-events: none;
+}
+.inner-border {
+  position: absolute;
+  inset: 32px;
+  border: 1px solid rgba(200, 57, 58, 0.25);
+  pointer-events: none;
+}
+.card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  padding: 50px 70px;
+}
+.left-col {
+  flex: 1.15;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-right: 40px;
+}
+.bismillah {
+  font-family: 'Amiri', serif;
+  font-size: 26px;
+  color: #C8393A;
+  margin-bottom: 8px;
+}
+.eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #C8393A;
+  margin-bottom: 16px;
+}
+.names {
+  font-family: 'Alex Brush', cursive;
+  font-size: 60px;
+  color: #F5EBE6;
+  line-height: 1.15;
+  margin-bottom: 18px;
+  text-shadow: 0 0 20px rgba(200, 57, 58, 0.5);
+}
+.amp {
+  font-family: 'Alex Brush', cursive;
+  color: #C8393A;
+  font-size: 0.85em;
+  display: block;
+  margin: -6px 0;
+}
+.divider {
+  width: 140px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #C8393A, transparent);
+  margin-bottom: 18px;
+}
+.date {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #F5EBE6;
+  margin-bottom: 6px;
+}
+.hijri {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  color: #A8908A;
+  font-style: italic;
+  margin-bottom: 14px;
+}
+.venue {
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  color: #F0E4E0;
+  line-height: 1.6;
+}
+.shiyas-tag {
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(200, 57, 58, 0.3);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #C8393A;
+}
+.right-col {
+  flex: 0.85;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.img-frame {
+  width: 100%;
+  height: 480px;
+  border: 1px solid rgba(200, 57, 58, 0.5);
+  box-shadow: 0 0 30px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,0.6);
+  background: url('rashid.png') center/cover no-repeat;
+  position: relative;
+}
+.img-frame::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(245, 235, 230, 0.15);
+}
+</style>
+</head>
+<body>
+<div class="outer-border"></div>
+<div class="inner-border"></div>
+<div class="card">
+  <div class="left-col">
+    <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+    <div class="eyebrow">Wedding Invitation</div>
+    <div class="names">Shahin<span class="amp">&amp;</span>Beegam Shibina</div>
+    <div class="divider"></div>
+    <div class="date">Thursday · 24 December 2026</div>
+    <div class="hijri">15 Rajab 1448 AH · Kallara, Kerala</div>
+    <div class="venue">
+      Nikah: Happy Convention Centre (11:30 AM)<br>
+      Reception: AR Mini Hall (03:30 PM)
+    </div>
+    <div class="shiyas-tag">❦ Sharing the happiness with Shiyas</div>
+  </div>
+  <div class="right-col">
+    <div class="img-frame"></div>
+  </div>
+</div>
+</body>
+</html>
