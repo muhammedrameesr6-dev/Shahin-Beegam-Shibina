@@ -51,9 +51,9 @@
   <text x="350" y="490" text-anchor="middle" fill="#E6D5D0" font-family="'Cinzel', serif" font-size="13.5" letter-spacing="1">Nikah: Happy Convention Centre (11:30 AM)</text>
   <text x="350" y="515" text-anchor="middle" fill="#E6D5D0" font-family="'Cinzel', serif" font-size="13.5" letter-spacing="1">Reception: AR Mini Hall (03:30 PM)</text>
 
-  <!-- Shiyas Mention -->
+  <!-- Shijas Mention -->
   <line x1="260" y1="540" x2="440" y2="540" stroke="#C8393A" stroke-width="0.8" stroke-dasharray="3,3" stroke-opacity="0.4" />
-  <text x="350" y="565" text-anchor="middle" fill="#C8393A" font-family="'Cinzel', serif" font-size="12" letter-spacing="2">❦ SHARING THE HAPPINESS WITH SHIYAS</text>
+  <text x="350" y="565" text-anchor="middle" fill="#C8393A" font-family="'Cinzel', serif" font-size="12" letter-spacing="2">❦ SHARING THE HAPPINESS WITH SHIJAS</text>
 
   <!-- Right Image Frame -->
   <rect x="710" y="75" width="410" height="480" fill="#0A0204" stroke="#C8393A" stroke-width="1.2" />
