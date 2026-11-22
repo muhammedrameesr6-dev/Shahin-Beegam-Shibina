@@ -261,7 +261,7 @@ function sendWishWhatsApp(e) {
 
   // Construct message for WhatsApp
   const textBody =
-    `*Wedding Wishes for Shahin & Beegam Shibina* ✨\n\n` +
+    `*Wedding Wishes for Shahin S & Beegam Shibina* ✨\n\n` +
     `*From:* ${name}\n\n` +
     `*Message:*\n${message}\n\n` +
     `_Sent via Wedding Invitation Website_`;
